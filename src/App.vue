@@ -1,26 +1,172 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <form class="calculator" name="calc" action="">
+      <input type="text" class="value" readonly name="txt" v-model="inputValue">
+      <span class="num clear" @click="inputValue=''"><i>C</i></span>
+      <span class="num" @click="setInputValue('/')"><i>/</i></span>
+      <span class="num" @click="setInputValue('*')"><i>*</i></span>
+      <span class="num" @click="setInputValue('7')"><i>7</i></span>
+      <span class="num" @click="setInputValue('8')"><i>8</i></span>
+      <span class="num" @click="setInputValue('9')"><i>9</i></span>
+      <span class="num" @click="setInputValue('-')"><i>-</i></span>
+      <span class="num" @click="setInputValue('4')"><i>4</i></span>
+      <span class="num" @click="setInputValue('5')"><i>5</i></span>
+      <span class="num" @click="setInputValue('6')"><i>6</i></span>
+      <span class="num plus" @click="setInputValue('+')"><i>+</i></span>
+      <span class="num" @click="setInputValue('4')"><i>1</i></span>
+      <span class="num" @click="setInputValue('5')"><i>2</i></span>
+      <span class="num" @click="setInputValue('6')"><i>3</i></span>
+      <span class="num" @click="setInputValue('0')"><i>0</i></span>
+      <span class="num" @click="setInputValue('00')"><i>00</i></span>
+      <span class="num" @click="setInputValue('.')"><i>.</i></span>
+      <span class="num equal" @click="calculator()"><i>=</i></span>
+    </form>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from '@vue/reactivity'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  setup() {
+    let inputValue = ref('')
+
+    const setInputValue = (string) => {
+      inputValue.value += string
+    }
+
+    const calculator = () => {
+      inputValue.value = eval(inputValue.value);
+    }
+
+    return { inputValue, setInputValue, calculator }
+  },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: consolas;
 }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #333;
+}
+
+.container {
+  position: relative;
+  min-width: 300px;
+  min-height: 400px;
+  background: #333;
+  padding: 40px 30px 30px;
+  border-radius: 20px;
+  box-shadow: 25px 25px 75px rgba(0, 0, 0, 0.25), 
+  10px 10px 70px rgba(0, 0, 0, 0.25), 
+  inset -5px -5px 15px rgba(0, 0, 0, 0.5),
+  inset 5px 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.calculator {
+  position: relative;
+  display: grid;
+}
+
+.calculator .value {
+  position: relative;
+  grid-column: span 4;
+  height: 100px;
+  width: calc(100% - 20px);
+  left: 10px;
+  border: none;
+  outline: none;
+  background: #a7af7c;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.75);
+  text-align: right;
+  padding: 10px;
+  font-size: 2em;
+}
+
+.calculator span {
+  position: relative;
+  display: grid;
+  width: 80px;
+  height: 80px;
+  margin: 8px;
+  background: linear-gradient(180deg, #2f2f2f, #3f3f3f);
+  box-shadow: inset -8px 0 8px rgba(0, 0, 0, 0.15),
+  inset 0px -8px 8px rgba(0, 0, 0, 0.25),
+  0 0 0 2px rgba(0, 0, 0, 0.75),
+  10px 20px 25px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  user-select: none;
+  cursor: pointer;
+  font-weight: 400;
+  border-radius: 10px;
+  place-items: center;
+}
+
+.calculator span::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  bottom: 14px;
+  right: 12px;
+  background: linear-gradient(90deg, #2d2d2d, #4d4d4d);
+  border-radius: 10px;
+  box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.1), 10px 5px 10px rgba(0, 0, 0, 0.15);
+  border-left: 1px solid #0004;
+  border-bottom: 1px solid #0004;
+  border-top: 1px solid #0009;
+}
+
+.calculator span:active{
+  filter: brightness(1.5)
+}
+
+.calculator span i{
+  position: relative;
+  font-style: normal;
+  font-size: 1.5em;
+  text-transform: uppercase;
+}
+
+.calculator .clear {
+  grid-column: span 2;
+  width: 180px;
+  background: #f00;
+}
+
+.calculator .clear::before {
+  background: linear-gradient(90deg, #d20000, #ffffff5c);
+  border-left: 1px solid #fff4;
+  border-bottom: 1px solid #fff4;
+  border-top: 1px solid #fff4;
+}
+
+.calculator .plus {
+  grid-row: span 2;
+  height: 180px;
+}
+
+.calculator .equal {
+    background: #2196f3;
+}
+
+.calculator .equal::before {
+ background: linear-gradient(90deg, #1479c9, #ffffff5c);
+  border-left: 1px solid #fff4;
+  border-bottom: 1px solid #fff4;
+  border-top: 1px solid #fff4;}
+
 </style>
